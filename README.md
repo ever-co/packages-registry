@@ -92,7 +92,7 @@ Client (yarn/npm) → Ever Registry (Verdaccio) → npmjs (upstream)
 
 ## License
 
-This project is licensed under the [GNU Affero General Public License v3.0](LICENSE).
+This project is licensed under the [MIT](LICENSE).
 
 ## Contact
 
