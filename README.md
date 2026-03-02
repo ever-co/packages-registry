@@ -10,9 +10,14 @@ Upstream packages are proxied and cached from the official [npmjs](https://regis
 
 ## Deployment
 
-1. Connect this repo to a new Railway service
-2. Add a **volume** mounted at `/verdaccio/storage`
-3. Deploy — Railway auto-builds the Dockerfile
+### Railway Project Setup
+
+1. Create a new project in Railway named **Verdaccio**
+2. Add a new service and set **Source Repo** (GitHub) to `https://github.com/ever-co/packages-registry`
+3. Attach a **volume** (50 GB) mounted at `/verdaccio/storage`
+4. Configure a **custom domain**: `packages.ever.co` (Port `4873`)
+5. Enable **Cloudflare proxy** for the custom domain
+6. Deploy — Railway auto-builds the Dockerfile
 
 > Railway assigns `$PORT` automatically. The entrypoint handles it.
 
