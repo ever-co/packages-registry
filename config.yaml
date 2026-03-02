@@ -1,0 +1,76 @@
+# Verdaccio Configuration
+# https://verdaccio.org/docs/configuration
+
+# Storage location (should be backed by a persistent volume)
+storage: /verdaccio/storage/data
+
+# Plugin directory
+plugins: /verdaccio/plugins
+
+# =============================================================================
+# Authentication
+# =============================================================================
+auth:
+  htpasswd:
+    file: /verdaccio/storage/htpasswd
+    # Set to a positive number to allow self-registration (e.g. 1000).
+    # Set to -1 to disable self-registration after creating your user(s).
+    max_users: 1000
+
+# =============================================================================
+# Uplinks (upstream registries to proxy)
+# =============================================================================
+uplinks:
+  npmjs:
+    url: https://registry.npmjs.org/
+    timeout: 30s
+    max_fails: 5
+    fail_timeout: 10m
+
+# =============================================================================
+# Package Access Control
+# =============================================================================
+packages:
+  # Scoped packages for Ever Co.
+  "@ever-co/*":
+    access: $authenticated
+    publish: $authenticated
+    unpublish: $authenticated
+
+  # All other packages — proxied from npmjs
+  "**":
+    access: $authenticated
+    publish: $authenticated
+    unpublish: $authenticated
+    proxy: npmjs
+
+# =============================================================================
+# Security
+# =============================================================================
+security:
+  api:
+    jwt:
+      sign:
+        expiresIn: 60d
+
+# =============================================================================
+# Web UI
+# =============================================================================
+web:
+  title: Ever Registry
+  primary_color: "#4f46e5"
+
+# =============================================================================
+# Middleware
+# =============================================================================
+middlewares:
+  audit:
+    enabled: true
+
+# =============================================================================
+# Logging
+# =============================================================================
+log:
+  type: stdout
+  format: pretty
+  level: warn

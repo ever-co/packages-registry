@@ -1,0 +1,15 @@
+# Storage (never commit registry data)
+storage/
+
+# htpasswd (contains hashed credentials)
+htpasswd
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
