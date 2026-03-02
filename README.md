@@ -2,6 +2,8 @@
 
 Private npm registry proxy powered by [Verdaccio](https://verdaccio.org), deployed on [Railway](https://railway.app).
 
+**Registry URL**: [https://packages.ever.co](https://packages.ever.co) (private access only — authentication required)
+
 All requests are authenticated — only users with a valid auth token can install or publish packages. Public (unauthenticated) access is disabled by default.
 
 Upstream packages are proxied and cached from the official [npmjs](https://registry.npmjs.org/) registry.
@@ -40,6 +42,19 @@ auth:
 2. Commit and push — Railway redeploys automatically
 3. Registration is now locked. Only existing users can authenticate.
 
+## Cloudflare Configuration
+
+If serving behind Cloudflare (e.g. `packages.ever.co`), you must disable features that interfere with Verdaccio's web UI:
+
+1. Go to your domain in the **Cloudflare Dashboard**
+2. Navigate to **Speed** → **Optimization** → **Content Optimization**
+3. **Disable Rocket Loader** — it rewrites `<script>` tags and breaks Verdaccio's SPA
+4. Optionally, create a **Page Rule** for `packages.ever.co/*`:
+   - Rocket Loader: **Off**
+   - Cache Level: **Bypass** (let Verdaccio handle its own caching)
+
+> Without these changes, the web UI will load blank with 404 errors on static assets (`/-/static/vendors.*.js`).
+
 ## Client Configuration
 
 ### Local Development
@@ -47,8 +62,8 @@ auth:
 Add the registry and auth token to your `~/.npmrc`:
 
 ```
-registry=https://<your-railway-url>/
-//your-railway-url/:_authToken=<your-token>
+registry=https://packages.ever.co/
+//packages.ever.co/:_authToken=<your-token>
 ```
 
 ### CI / GitHub Actions
@@ -58,14 +73,14 @@ Store the auth token as a GitHub Secret (`VERDACCIO_TOKEN`), then configure in w
 ```yaml
 - name: Configure npm registry
   run: |
-    echo "//your-railway-url/:_authToken=${{ secrets.VERDACCIO_TOKEN }}" >> ~/.npmrc
-    echo "registry=https://your-railway-url/" >> ~/.npmrc
+    echo "//packages.ever.co/:_authToken=${{ secrets.VERDACCIO_TOKEN }}" >> ~/.npmrc
+    echo "registry=https://packages.ever.co/" >> ~/.npmrc
 ```
 
 ### Yarn
 
 ```bash
-yarn config set registry https://<your-railway-url>/
+yarn config set registry https://packages.ever.co/
 ```
 
 ## Configuration
@@ -82,12 +97,12 @@ All Verdaccio settings are managed through [`config.yaml`](config.yaml). Changes
 ## Architecture
 
 ```
-Client (yarn/npm) → Ever Registry (Verdaccio) → npmjs (upstream)
-                          ↓
-                   Railway Volume
-                   /verdaccio/storage/
-                   ├── data/        (cached packages)
-                   └── htpasswd     (user credentials)
+Client (yarn/npm) → Cloudflare → Ever Registry (Verdaccio) → npmjs (upstream)
+                                        ↓
+                                 Railway Volume
+                                 /verdaccio/storage/
+                                 ├── data/        (cached packages)
+                                 └── htpasswd     (user credentials)
 ```
 
 ## License
