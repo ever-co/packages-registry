@@ -1,4 +1,4 @@
-# Ever Packages Registry
+# Ever Packages Registry (Proxy)
 
 Private npm registry proxy powered by [Verdaccio](https://verdaccio.org), deployed on [Railway](https://railway.app).
 
