@@ -16,6 +16,17 @@ Upstream packages are proxied and cached from the official [npmjs](https://regis
 
 > Railway assigns `$PORT` automatically. The entrypoint handles it.
 
+### Railway Environment Variables
+
+Add the following variables in **Railway → Service → Variables**:
+
+| Variable            | Value                | Description               |
+| ------------------- | -------------------- | ------------------------- |
+| `LISTEN_PORT`       | `4873`               | Verdaccio listen port     |
+| `PORT`              | `4873`               | Railway required port     |
+| `VERDACCIO_PORT`    | `${{registry.PORT}}` | Railway service reference |
+| `VERDACCIO_STORAGE` | `/verdaccio/storage` | Persistent storage path   |
+
 ## First-Time Setup
 
 After the first deploy, **registration is open** so you can create your admin user:
