@@ -2,9 +2,9 @@ FROM verdaccio/verdaccio:6
 
 LABEL maintainer="Ever Co. LTD <ever@ever.co>"
 LABEL description="Verdaccio npm registry proxy with Railway volume support"
-LABEL org.opencontainers.image.source="https://github.com/ever-co/verdaccio"
+LABEL org.opencontainers.image.source="https://github.com/ever-co/packages-registry"
 LABEL org.opencontainers.image.vendor="Ever Co. LTD"
-LABEL org.opencontainers.image.licenses="AGPL-3.0"
+LABEL org.opencontainers.image.licenses="MIT"
 
 USER root
 
